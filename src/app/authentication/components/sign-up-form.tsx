@@ -53,9 +53,9 @@ const SignUpForm = () => {
           router.push("/");
           toast.success("Conta criada com sucesso!");
         },
-        onError: (error) => {
-          if (error.error.code === "USER_ALREADY_EXISTS") {
-            form.setError("email", {
+        onError: (ctx) => {
+          if (ctx.error.code === "USER_ALREADY_EXISTS") {
+            return form.setError("email", {
               message: "Já existe uma conta com este email",
             });
           }
