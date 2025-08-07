@@ -41,5 +41,11 @@ export const getCart = async () => {
     };
   }
 
-  return cart;
+  return {
+    ...cart,
+    totalPriceInCents: cart.items.reduce(
+      (accumulator, item) => accumulator + item.productVariant.priceInCents * item.quantity,
+      0
+    ),
+  };
 };
