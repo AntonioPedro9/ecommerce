@@ -1,12 +1,11 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { MinusIcon, PlusIcon, TrashIcon } from "lucide-react";
 import Image from "next/image";
 import { toast } from "sonner";
 
-import { decreaseCartProductQuantity } from "@/actions/decrease-cart-product-quantity";
-import { increaseCartProductQuantity } from "@/actions/increase-cart-product-quantity";
-import { removeCartProduct } from "@/actions/remove-cart-product";
 import { formatCentsToBRL } from "@/helpers/money";
+import { useDecreaseCartProductQuantity } from "@/hooks/mutations/use-decrease-cart-product-quantity";
+import { useIncreaseCartProductQuantity } from "@/hooks/mutations/use-increase-cart-product-quantity";
+import { useRemoveCartProduct } from "@/hooks/mutations/use-remove-cart-product";
 
 import { Button } from "../ui/button";
 
@@ -27,31 +26,9 @@ const CartItem = ({
   productVariantPriceInCents,
   quantity,
 }: CartItemProps) => {
-  const queryClient = useQueryClient();
-
-  const removeCartProductMutation = useMutation({
-    mutationKey: ["remove-cart-product"],
-    mutationFn: () => removeCartProduct({ cartItemId: id }),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["cart"] });
-    },
-  });
-
-  const decreaseCartProductQuantityMutation = useMutation({
-    mutationKey: ["decrease-cart-product-quantity"],
-    mutationFn: () => decreaseCartProductQuantity({ cartItemId: id }),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["cart"] });
-    },
-  });
-
-  const increaseCartProductQuantityMutation = useMutation({
-    mutationKey: ["decrease-cart-product-quantity"],
-    mutationFn: () => increaseCartProductQuantity({ cartItemId: id }),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["cart"] });
-    },
-  });
+  const removeCartProductMutation = useRemoveCartProduct(id);
+  const decreaseCartProductQuantityMutation = useDecreaseCartProductQuantity(id);
+  const increaseCartProductQuantityMutation = useIncreaseCartProductQuantity(id);
 
   const handleDeleteClick = () => {
     removeCartProductMutation.mutate(undefined, {

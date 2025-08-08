@@ -13,6 +13,8 @@ import { increaseCartProductQuantitySchema } from "./schema";
 export const increaseCartProductQuantity = async (data: z.infer<typeof increaseCartProductQuantitySchema>) => {
   increaseCartProductQuantitySchema.parse(data);
 
+  console.log(data);
+
   const session = await auth.api.getSession({
     headers: await headers(),
   });
