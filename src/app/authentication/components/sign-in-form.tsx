@@ -39,7 +39,7 @@ const SignInForm = () => {
         },
         onError: (ctx) => {
           if (ctx.error.code === "INVALID_EMAIL_OR_PASSWORD") {
-            toast.error("Email ou senha inválidos");
+            toast.error("Email ou senha inválidos.");
           }
         },
       },
