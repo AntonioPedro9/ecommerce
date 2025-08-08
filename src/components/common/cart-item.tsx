@@ -4,6 +4,7 @@ import Image from "next/image";
 import { toast } from "sonner";
 
 import { decreaseCartProductQuantity } from "@/actions/decrease-cart-product-quantity";
+import { increaseCartProductQuantity } from "@/actions/increase-cart-product-quantity";
 import { removeCartProduct } from "@/actions/remove-cart-product";
 import { formatCentsToBRL } from "@/helpers/money";
 
@@ -44,6 +45,14 @@ const CartItem = ({
     },
   });
 
+  const increaseCartProductQuantityMutation = useMutation({
+    mutationKey: ["decrease-cart-product-quantity"],
+    mutationFn: () => increaseCartProductQuantity({ cartItemId: id }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["cart"] });
+    },
+  });
+
   const handleDeleteClick = () => {
     removeCartProductMutation.mutate(undefined, {
       onSuccess: () => {
@@ -57,11 +66,19 @@ const CartItem = ({
   };
 
   const handleDecreaseQuantityClick = () => {
-    console.log("1");
     decreaseCartProductQuantityMutation.mutate(undefined, {
       onError: (error) => {
         console.error(error);
-        toast.error("Erro ao atualizar a quantidade do produto .");
+        toast.error("Erro ao atualizar a quantidade do produto.");
+      },
+    });
+  };
+
+  const handleIncreaseQuantityClick = () => {
+    increaseCartProductQuantityMutation.mutate(undefined, {
+      onError: (error) => {
+        console.error(error);
+        toast.error("Erro ao atualizar a quantidade do produto.");
       },
     });
   };
@@ -78,7 +95,7 @@ const CartItem = ({
               <MinusIcon />
             </Button>
             <p className="text-xs font-medium">{quantity}</p>
-            <Button className="h-4 w-4" variant="ghost" onClick={() => {}}>
+            <Button className="h-4 w-4" variant="ghost" onClick={handleIncreaseQuantityClick}>
               <PlusIcon />
             </Button>
           </div>
