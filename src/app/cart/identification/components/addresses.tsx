@@ -78,10 +78,8 @@ const Addresses = ({ shippingAddresses, defaultShippingAddressId }: AddressesPro
       await updateCartShippingAddressMutation.mutateAsync({
         shippingAddressId: newAddress.id,
       });
-
-      toast.success("Endereço vinculado ao carrinho!");
     } catch (error) {
-      toast.error("Erro ao criar endereço. Tente novamente.");
+      toast.error("Erro ao criar endereço.");
       console.error(error);
     }
   };
@@ -93,11 +91,9 @@ const Addresses = ({ shippingAddresses, defaultShippingAddressId }: AddressesPro
       await updateCartShippingAddressMutation.mutateAsync({
         shippingAddressId: selectedAddress,
       });
-
-      toast.success("Endereço selecionado para entrega!");
       router.push("/cart/confirmation");
     } catch (error) {
-      toast.error("Erro ao selecionar endereço. Tente novamente.");
+      toast.error("Erro ao selecionar endereço.");
       console.error(error);
     }
   };
