@@ -5,7 +5,7 @@ import { headers } from "next/headers";
 import Stripe from "stripe";
 
 import { db } from "@/db";
-import { cartItemTable, orderItemTable, orderTable } from "@/db/schema";
+import { orderItemTable, orderTable } from "@/db/schema";
 import { auth } from "@/lib/auth";
 
 import { CreateCheckoutSessionSchema, createCheckoutSessionSchema } from "./schema";
