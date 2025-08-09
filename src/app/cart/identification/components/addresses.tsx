@@ -145,10 +145,11 @@ const Addresses = ({ shippingAddresses, defaultShippingAddressId }: AddressesPro
         )}
 
         {selectedAddress && selectedAddress !== "add_new" && (
-          <div className="mt-4">
+          <div className="mt-6">
             <Button
               onClick={handleGoToPayment}
-              className="w-full"
+              className="w-full rounded-full"
+              size="lg"
               disabled={updateCartShippingAddressMutation.isPending}
             >
               {updateCartShippingAddressMutation.isPending ? "Processando..." : "Ir para pagamento"}

@@ -69,7 +69,7 @@ export const Cart = () => {
                 <p>{formatCentsToBRL(cart?.totalPriceInCents ?? 0)}</p>
               </div>
 
-              <Button className="mt-5 rounded-full" asChild>
+              <Button className="mt-5 rounded-full" size="lg" asChild>
                 <Link href="/cart/identification">Finalizar compra</Link>
               </Button>
             </div>
