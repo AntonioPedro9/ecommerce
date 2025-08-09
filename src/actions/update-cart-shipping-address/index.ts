@@ -15,27 +15,18 @@ export const updateCartShippingAddress = async (data: UpdateCartShippingAddressS
   const session = await auth.api.getSession({
     headers: await headers(),
   });
-
-  if (!session?.user) {
-    throw new Error("Unauthorized");
-  }
+  if (!session?.user) throw new Error("Unauthorized");
 
   const shippingAddress = await db.query.shippingAddressTable.findFirst({
     where: (shippingAddress, { eq, and }) =>
       and(eq(shippingAddress.id, data.shippingAddressId), eq(shippingAddress.userId, session.user.id)),
   });
-
-  if (!shippingAddress) {
-    throw new Error("Shipping address not found or unauthorized");
-  }
+  if (!shippingAddress) throw new Error("Shipping address not found or unauthorized");
 
   const cart = await db.query.cartTable.findFirst({
     where: (cart, { eq }) => eq(cart.userId, session.user.id),
   });
-
-  if (!cart) {
-    throw new Error("Cart not found");
-  }
+  if (!cart) throw new Error("Cart not found");
 
   await db
     .update(cartTable)
