@@ -8,11 +8,14 @@ export const getUseFinishOrderMutationKey = () => ["finish-order"];
 
 export const useFinishOrder = () => {
   const queryClient = useQueryClient();
+
   return useMutation({
     mutationKey: getUseFinishOrderMutationKey(),
+
     mutationFn: async () => {
-      await finishOrder();
+      return await finishOrder();
     },
+
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: getUseCartQueryKey() });
     },

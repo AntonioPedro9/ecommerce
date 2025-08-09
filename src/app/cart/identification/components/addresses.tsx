@@ -328,7 +328,8 @@ const Addresses = ({ shippingAddresses, defaultShippingAddressId }: AddressesPro
 
               <Button
                 type="submit"
-                className="w-full"
+                className="w-full rounded-full mt-2"
+                size="lg"
                 disabled={createShippingAddressMutation.isPending || updateCartShippingAddressMutation.isPending}
               >
                 {createShippingAddressMutation.isPending || updateCartShippingAddressMutation.isPending
