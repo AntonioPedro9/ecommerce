@@ -16,11 +16,11 @@ const CheckoutSuccessPage = () => {
           <Image src="/illustration.svg" alt="Success" width={300} height={300} className="mx-auto" />
           <DialogTitle className="mt-4 text-2xl">Pedido efetuado!</DialogTitle>
           <DialogDescription className="font-medium">
-            Seu pedido foi efetuado com sucesso. Você pode acompanhar o status na seção de “Meus Pedidos”.
+            Você pode acompanhar o status na seção de “Meus Pedidos”.
           </DialogDescription>
           <DialogFooter className="gap-4">
-            <Button className="rounded-full" size="lg">
-              Ver meus pedidos
+            <Button className="rounded-full" size="lg" asChild>
+              <Link href="/my-orders">Ver meus pedidos</Link>
             </Button>
             <Button className="rounded-full" variant="outline" size="lg" asChild>
               <Link href="/">Voltar para a loja</Link>
