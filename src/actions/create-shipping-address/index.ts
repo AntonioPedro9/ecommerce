@@ -29,7 +29,6 @@ export const createShippingAddress = async (data: CreateShippingAddressSchema) =
       state: data.state,
       neighborhood: data.neighborhood,
       zipCode: data.zipCode,
-      country: "Brasil",
       phone: data.phone,
       email: data.email,
       cpfOrCnpj: data.cpf,

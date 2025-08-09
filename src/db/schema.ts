@@ -209,7 +209,6 @@ export const orderTable = pgTable("order", {
   state: text().notNull(),
   neighborhood: text().notNull(),
   zipCode: text().notNull(),
-  country: text().notNull(),
   phone: text().notNull(),
   email: text().notNull(),
   cpfOrCnpj: text().notNull(),
