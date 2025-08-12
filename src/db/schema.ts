@@ -131,7 +131,9 @@ export const shippingAddressTable = pgTable("shipping_address", {
   cpfOrCnpj: text("cpf_or_cnpj").notNull(),
   email: text().notNull(),
   phone: text().notNull(),
+  isDeleted: boolean("is_deleted").default(false).notNull(),
   createdAt: timestamp("created_at").notNull().defaultNow(),
+  deletedAt: timestamp("deleted_at", { withTimezone: true }),
 });
 
 export const shippingAddressRelations = relations(shippingAddressTable, ({ one }) => ({

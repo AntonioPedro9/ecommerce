@@ -35,7 +35,7 @@ const Orders = ({ orders }: OrderProps) => {
                   <AccordionTrigger>
                     <div className="flex flex-col gap-1">
                       {order.status === "paid" && <Badge>Pago</Badge>}
-                      {order.status === "pending" && <Badge variant="outline">Paamento pendente</Badge>}
+                      {order.status === "pending" && <Badge variant="outline">Pagamento pendente</Badge>}
                       {order.status === "canceled" && <Badge variant="destructive">Cancelado</Badge>}
 
                       <div className="flex justify-between items-center">

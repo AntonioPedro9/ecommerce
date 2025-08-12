@@ -17,7 +17,7 @@ export async function getUserAddresses() {
     const addresses = await db
       .select()
       .from(shippingAddressTable)
-      .where(eq(shippingAddressTable.userId, session.user.id))
+      .where(eq(shippingAddressTable.userId, session.user.id) && eq(shippingAddressTable.isDeleted, false))
       .orderBy(shippingAddressTable.createdAt);
 
     return addresses;

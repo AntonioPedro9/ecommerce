@@ -29,8 +29,6 @@ const MyOrderPage = async () => {
     },
   });
 
-  console.log(orders);
-
   return (
     <>
       <Header />

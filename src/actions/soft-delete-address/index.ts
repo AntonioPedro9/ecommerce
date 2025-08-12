@@ -8,10 +8,10 @@ import { db } from "@/db";
 import { shippingAddressTable } from "@/db/schema";
 import { auth } from "@/lib/auth";
 
-import { deleteShippingAddressSchema } from "./schema";
+import { softDeleteAddressSchema } from "./schema";
 
-export const deleteShippingAddress = async (data: z.infer<typeof deleteShippingAddressSchema>) => {
-  deleteShippingAddressSchema.parse(data);
+export const softDeleteAddress = async (data: z.infer<typeof softDeleteAddressSchema>) => {
+  softDeleteAddressSchema.parse(data);
 
   const session = await auth.api.getSession({
     headers: await headers(),
@@ -26,5 +26,8 @@ export const deleteShippingAddress = async (data: z.infer<typeof deleteShippingA
   const shippingAddressDoesNotBelongToUser = shippingAddress.userId !== session.user.id;
   if (shippingAddressDoesNotBelongToUser) throw new Error("Unauthorized");
 
-  await db.delete(shippingAddressTable).where(eq(shippingAddressTable.id, shippingAddress.id));
+  await db
+    .update(shippingAddressTable)
+    .set({ isDeleted: true, deletedAt: new Date() })
+    .where(eq(shippingAddressTable.id, shippingAddress.id));
 };

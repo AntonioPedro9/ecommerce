@@ -8,7 +8,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { RadioGroupItem } from "@/components/ui/radio-group";
 import { shippingAddressTable } from "@/db/schema";
-import { useDeleteShippingAddress } from "@/hooks/mutations/use-delete-shipping-address";
+import { useSoftDeleteAddress } from "@/hooks/mutations/use-soft-delete-address";
 
 import { formatAddress } from "../../helpers/address";
 
@@ -19,7 +19,7 @@ interface AddressItemProps {
 }
 
 export const AddressItem = ({ address, onSelect, isSelected }: AddressItemProps) => {
-  const deleteShippingAddressMutation = useDeleteShippingAddress(address.id);
+  const deleteShippingAddressMutation = useSoftDeleteAddress(address.id);
 
   const handleDeleteClick = async () => {
     try {
