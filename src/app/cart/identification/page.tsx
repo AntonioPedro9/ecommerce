@@ -44,7 +44,11 @@ const IdentificationPage = async () => {
     <div>
       <Header />
       <div className="px-5 space-y-4">
-        <Addresses shippingAddresses={shippingAddresses} defaultShippingAddressId={cart.shippingAddress?.id || null} />
+        <Addresses
+          shippingAddresses={shippingAddresses}
+          defaultShippingAddressId={cart.shippingAddress?.id || null}
+          authenticatedUserEmail={session.user.email}
+        />
         <CartSummary
           subtotalInCents={cartTotalInCents}
           totalInCents={cartTotalInCents}

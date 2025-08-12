@@ -4,7 +4,7 @@ import CartSummary from "@/app/cart/components/cart-summary";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
-import { orderStatus, orderTable } from "@/db/schema";
+import { orderTable } from "@/db/schema";
 
 interface OrderProps {
   orders: Array<{
