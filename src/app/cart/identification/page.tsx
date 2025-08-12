@@ -1,3 +1,5 @@
+"use server";
+
 import { eq } from "drizzle-orm";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
@@ -23,9 +25,14 @@ const IdentificationPage = async () => {
       shippingAddress: true,
       items: {
         with: {
-          productVariant: {
+          productStock: {
             with: {
-              product: true,
+              productVariant: {
+                with: {
+                  product: true,
+                },
+              },
+              productSize: true,
             },
           },
         },
@@ -38,27 +45,31 @@ const IdentificationPage = async () => {
     where: eq(shippingAddressTable.userId, session.user.id),
   });
 
-  const cartTotalInCents = cart.items.reduce((acc, item) => acc + item.productVariant.priceInCents * item.quantity, 0);
+  const cartTotalInCents = cart.items.reduce(
+    (acc, item) => acc + item.productStock.productVariant.priceInCents * item.quantity,
+    0
+  );
 
   return (
     <div>
       <Header />
-      <div className="px-5 space-y-4">
+      <div className="space-y-4 px-5">
         <Addresses
           shippingAddresses={shippingAddresses}
-          defaultShippingAddressId={cart.shippingAddress?.id || null}
+          defaultShippingAddressId={cart.shippingAddressId || null}
           authenticatedUserEmail={session.user.email}
         />
         <CartSummary
           subtotalInCents={cartTotalInCents}
           totalInCents={cartTotalInCents}
           products={cart.items.map((item) => ({
-            id: item.productVariant.id,
-            name: item.productVariant.product.name,
-            variantName: item.productVariant.name,
+            id: item.productStock.productVariant.id,
+            name: item.productStock.productVariant.product.name,
+            variantName: item.productStock.productVariant.name,
+            sizeValue: item.productStock.productSize.value,
             quantity: item.quantity,
-            priceInCents: item.productVariant.priceInCents,
-            imageUrl: item.productVariant.imageUrl,
+            priceInCents: item.productStock.productVariant.priceInCents,
+            imageUrl: item.productStock.productVariant.imageUrl,
           }))}
         />
       </div>

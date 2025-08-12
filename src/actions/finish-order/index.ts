@@ -19,7 +19,11 @@ export const finishOrder = async () => {
       shippingAddress: true,
       items: {
         with: {
-          productVariant: true,
+          productStock: {
+            with: {
+              productVariant: true,
+            },
+          },
         },
       },
     },
@@ -27,7 +31,10 @@ export const finishOrder = async () => {
   if (!cart) throw new Error("Cart not found");
   if (!cart.shippingAddress) throw new Error("Shipping address not found");
 
-  const totalPriceInCents = cart.items.reduce((acc, item) => acc + item.productVariant.priceInCents * item.quantity, 0);
+  const totalPriceInCents = cart.items.reduce(
+    (acc, item) => acc + item.productStock.productVariant.priceInCents * item.quantity,
+    0
+  );
 
   let orderId: string | undefined;
 
@@ -60,9 +67,9 @@ export const finishOrder = async () => {
 
     const orderItemsPayload: Array<typeof orderItemTable.$inferInsert> = cart.items.map((item) => ({
       orderId: order.id,
-      productVariantId: item.productVariant.id,
+      productStockId: item.productStock.id,
       quantity: item.quantity,
-      priceInCents: item.productVariant.priceInCents,
+      priceInCents: item.productStock.productVariant.priceInCents,
     }));
 
     await tx.insert(orderItemTable).values(orderItemsPayload);

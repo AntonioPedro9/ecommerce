@@ -32,9 +32,14 @@ export const createCheckoutSession = async (data: CreateCheckoutSessionSchema) =
   const orderItems = await db.query.orderItemTable.findMany({
     where: eq(orderItemTable.orderId, orderId),
     with: {
-      productVariant: {
+      productStock: {
         with: {
-          product: true,
+          productVariant: {
+            with: {
+              product: true,
+            },
+          },
+          productSize: true,
         },
       },
     },
@@ -50,13 +55,17 @@ export const createCheckoutSession = async (data: CreateCheckoutSessionSchema) =
       orderId,
     },
     line_items: orderItems.map((orderItem) => {
+      const variant = orderItem.productStock.productVariant;
+      const product = variant.product;
+      const productSize = orderItem.productStock.productSize;
+
       return {
         price_data: {
           currency: "brl",
           product_data: {
-            name: `${orderItem.productVariant.product.name} - ${orderItem.productVariant.name}`,
-            description: orderItem.productVariant.product.description,
-            images: [orderItem.productVariant.imageUrl],
+            name: `${product.name} - ${variant.name} (${productSize.value})`,
+            description: product.description,
+            images: [variant.imageUrl],
           },
           unit_amount: orderItem.priceInCents,
         },

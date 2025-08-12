@@ -3,7 +3,7 @@
 import { headers } from "next/headers";
 
 import { db } from "@/db";
-import { cartTable, shippingAddressTable } from "@/db/schema";
+import { cartTable } from "@/db/schema";
 import { auth } from "@/lib/auth";
 
 export const getCart = async () => {
@@ -18,9 +18,14 @@ export const getCart = async () => {
       shippingAddress: true,
       items: {
         with: {
-          productVariant: {
+          productStock: {
             with: {
-              product: true,
+              productVariant: {
+                with: {
+                  product: true,
+                },
+              },
+              productSize: true,
             },
           },
         },
@@ -46,7 +51,7 @@ export const getCart = async () => {
   return {
     ...cart,
     totalPriceInCents: cart.items.reduce(
-      (accumulator, item) => accumulator + item.productVariant.priceInCents * item.quantity,
+      (accumulator, item) => accumulator + item.productStock.productVariant.priceInCents * item.quantity,
       0
     ),
   };

@@ -1,5 +1,5 @@
-import { relations } from "drizzle-orm";
-import { boolean, integer, pgEnum, pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
+import { relations, sql } from "drizzle-orm";
+import { boolean, integer, pgEnum, pgTable, serial, text, timestamp, uuid } from "drizzle-orm/pg-core";
 
 export const userTable = pgTable("user", {
   id: text("id").primaryKey(),
@@ -108,11 +108,48 @@ export const productVariantTable = pgTable("product_variant", {
   createdAt: timestamp("created_at").notNull().defaultNow(),
 });
 
-export const productVariantRelations = relations(productVariantTable, ({ one }) => ({
+export const productVariantRelations = relations(productVariantTable, ({ one, many }) => ({
   product: one(productTable, {
     fields: [productVariantTable.productId],
     references: [productTable.id],
   }),
+  stockItems: many(productStockTable),
+}));
+
+export const productSizeTable = pgTable("product_size", {
+  id: uuid().primaryKey().defaultRandom(),
+  value: text("value").notNull(),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+});
+
+export const productSizeRelations = relations(productSizeTable, ({ many }) => ({
+  stockItems: many(productStockTable),
+}));
+
+export const productStockTable = pgTable("product_stock", {
+  id: uuid().primaryKey().defaultRandom(),
+  productVariantId: uuid("product_variant_id")
+    .notNull()
+    .references(() => productVariantTable.id, { onDelete: "cascade" }),
+  productSizeId: uuid("product_size_id")
+    .notNull()
+    .references(() => productSizeTable.id, { onDelete: "restrict" }),
+  quantity: integer("quantity").notNull().default(0),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at").notNull().defaultNow(),
+});
+
+export const productStockRelations = relations(productStockTable, ({ one, many }) => ({
+  productVariant: one(productVariantTable, {
+    fields: [productStockTable.productVariantId],
+    references: [productVariantTable.id],
+  }),
+  productSize: one(productSizeTable, {
+    fields: [productStockTable.productSizeId],
+    references: [productSizeTable.id],
+  }),
+  cartItems: many(cartItemTable),
+  orderItems: many(orderItemTable),
 }));
 
 export const shippingAddressTable = pgTable("shipping_address", {
@@ -175,9 +212,9 @@ export const cartItemTable = pgTable("cart_item", {
   cartId: uuid("cart_id")
     .notNull()
     .references(() => cartTable.id, { onDelete: "cascade" }),
-  productVariantId: uuid("product_variant_id")
+  productStockId: uuid("product_stock_id")
     .notNull()
-    .references(() => productVariantTable.id, { onDelete: "cascade" }),
+    .references(() => productStockTable.id, { onDelete: "cascade" }),
   quantity: integer("quantity").notNull().default(1),
   createdAt: timestamp("created_at").notNull().defaultNow(),
 });
@@ -187,9 +224,9 @@ export const cartItemRelations = relations(cartItemTable, ({ one }) => ({
     fields: [cartItemTable.cartId],
     references: [cartTable.id],
   }),
-  productVariant: one(productVariantTable, {
-    fields: [cartItemTable.productVariantId],
-    references: [productVariantTable.id],
+  productStock: one(productStockTable, {
+    fields: [cartItemTable.productStockId],
+    references: [productStockTable.id],
   }),
 }));
 
@@ -197,6 +234,7 @@ export const orderStatus = pgEnum("order_status", ["pending", "paid", "canceled"
 
 export const orderTable = pgTable("order", {
   id: uuid().primaryKey().defaultRandom(),
+  orderNumber: serial("order_number").notNull().unique(),
   userId: text("user_id")
     .notNull()
     .references(() => userTable.id, { onDelete: "cascade" }),
@@ -236,9 +274,9 @@ export const orderItemTable = pgTable("order_item", {
   orderId: uuid("order_id")
     .notNull()
     .references(() => orderTable.id, { onDelete: "cascade" }),
-  productVariantId: uuid("product_variant_id")
+  productStockId: uuid("product_stock_id")
     .notNull()
-    .references(() => productVariantTable.id, { onDelete: "restrict" }),
+    .references(() => productStockTable.id, { onDelete: "restrict" }),
   quantity: integer("quantity").notNull(),
   priceInCents: integer("price_in_cents").notNull(),
   createdAt: timestamp("created_at").notNull().defaultNow(),
@@ -249,8 +287,8 @@ export const orderItemRelations = relations(orderItemTable, ({ one }) => ({
     fields: [orderItemTable.orderId],
     references: [orderTable.id],
   }),
-  productVariant: one(productVariantTable, {
-    fields: [orderItemTable.productVariantId],
-    references: [productVariantTable.id],
+  productStock: one(productStockTable, {
+    fields: [orderItemTable.productStockId],
+    references: [productStockTable.id],
   }),
 }));

@@ -19,7 +19,6 @@ import { useCreateShippingAddress } from "@/hooks/mutations/use-create-shipping-
 import { useUpdateCartShippingAddress } from "@/hooks/mutations/use-update-cart-shipping-address";
 import { useUserAddresses } from "@/hooks/queries/use-user-addresses";
 
-import { formatAddress } from "../../helpers/address";
 import { AddressItem } from "./address-item";
 
 const formSchema = z.object({
@@ -157,19 +156,6 @@ const Addresses = ({ shippingAddresses, defaultShippingAddressId, authenticatedU
 
             <form onSubmit={form.handleSubmit(onSubmit)} className="mt-4 space-y-4">
               <div className="grid gap-4 md:grid-cols-2">
-                <FormField
-                  control={form.control}
-                  name="email"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormControl>
-                        <Input placeholder="Email *" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
                 <FormField
                   control={form.control}
                   name="fullName"

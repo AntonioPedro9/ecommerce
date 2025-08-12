@@ -19,9 +19,14 @@ const MyOrderPage = async () => {
     with: {
       items: {
         with: {
-          productVariant: {
+          productStock: {
             with: {
-              product: true,
+              productVariant: {
+                with: {
+                  product: true,
+                },
+              },
+              productSize: true,
             },
           },
         },
@@ -41,10 +46,10 @@ const MyOrderPage = async () => {
             createdAt: order.createdAt,
             items: order.items.map((item) => ({
               id: item.id,
-              imageUrl: item.productVariant.imageUrl,
-              productName: item.productVariant.product.name,
-              productVariantName: item.productVariant.name,
-              priceInCents: item.productVariant.priceInCents,
+              imageUrl: item.productStock.productVariant.imageUrl,
+              productName: item.productStock.productVariant.product.name,
+              productVariantName: `${item.productStock.productVariant.name} - ${item.productStock.productSize.value}`,
+              priceInCents: item.productStock.productVariant.priceInCents,
               quantity: item.quantity,
             })),
           }))}

@@ -1,7 +1,8 @@
 import crypto from "crypto";
+import { sql } from "drizzle-orm"; // Importação necessária para o truncate
 
 import { db } from ".";
-import { categoryTable, productTable, productVariantTable } from "./schema";
+import { categoryTable, productSizeTable, productStockTable, productTable, productVariantTable } from "./schema"; // Alterado 'sizeTable' para 'productSizeTable'
 
 const productImages = {
   Mochila: {
@@ -449,15 +450,31 @@ const products = [
   },
 ];
 
+// Dados para tamanhos e estoque
+const clothingSizes = ["P", "M", "G", "GG"];
+const shoeSizes = ["39", "40", "41", "42", "43", "44"];
+const genericSizes = ["Único"];
+const defaultStockQuantity = 100;
+
+const productSizesMap = new Map<string, string[]>();
+productSizesMap.set("Camisetas", clothingSizes);
+productSizesMap.set("Calças", clothingSizes);
+productSizesMap.set("Bermuda & Shorts", clothingSizes);
+productSizesMap.set("Jaquetas & Moletons", clothingSizes);
+productSizesMap.set("Tênis", shoeSizes);
+productSizesMap.set("Acessórios", genericSizes);
+
 async function main() {
   console.log("🌱 Iniciando o seeding do banco de dados...");
 
   try {
-    // Limpar dados existentes
+    // Limpar dados existentes (na ordem correta por causa das chaves estrangeiras)
     console.log("🧹 Limpando dados existentes...");
-    await db.delete(productVariantTable);
-    await db.delete(productTable);
-    await db.delete(categoryTable);
+    await db.execute(sql`TRUNCATE ${productStockTable} RESTART IDENTITY CASCADE`);
+    await db.execute(sql`TRUNCATE ${productVariantTable} RESTART IDENTITY CASCADE`);
+    await db.execute(sql`TRUNCATE ${productTable} RESTART IDENTITY CASCADE`);
+    await db.execute(sql`TRUNCATE ${categoryTable} RESTART IDENTITY CASCADE`);
+    await db.execute(sql`TRUNCATE ${productSizeTable} RESTART IDENTITY CASCADE`);
     console.log("✅ Dados limpos com sucesso!");
 
     // Inserir categorias primeiro
@@ -479,7 +496,22 @@ async function main() {
       categoryMap.set(categoryData.name, categoryId);
     }
 
-    // Inserir produtos
+    // Inserir tamanhos (Novo)
+    const allSizes = [...new Set([...clothingSizes, ...shoeSizes, ...genericSizes])];
+    const sizeMap = new Map<string, string>();
+    console.log("📏 Criando tamanhos...");
+    for (const size of allSizes) {
+      const sizeId = crypto.randomUUID();
+      await db.insert(productSizeTable).values({
+        id: sizeId,
+        value: size,
+      });
+      sizeMap.set(size, sizeId);
+      console.log(`  📏 Criado tamanho: ${size}`);
+    }
+
+    // Inserir produtos e suas variantes e estoque
+    let totalStockEntries = 0;
     for (const productData of products) {
       const productId = crypto.randomUUID();
       const productSlug = generateSlug(productData.name);
@@ -517,15 +549,33 @@ async function main() {
           priceInCents: variantData.price,
           slug: generateSlug(`${productData.name}-${variantData.color}`),
         });
+
+        // Inserir estoque para cada tamanho (Novo)
+        const sizesForProduct = productSizesMap.get(productData.categoryName) || [];
+        for (const sizeValue of sizesForProduct) {
+          const sizeId = sizeMap.get(sizeValue);
+          if (!sizeId) {
+            throw new Error(`Tamanho "${sizeValue}" não encontrado no mapa de tamanhos.`);
+          }
+          await db.insert(productStockTable).values({
+            productVariantId: variantId,
+            productSizeId: sizeId,
+            quantity: defaultStockQuantity,
+          });
+          totalStockEntries++;
+          console.log(
+            `    🔢 Criado estoque para ${variantData.color} - ${sizeValue} com ${defaultStockQuantity} unidades.`
+          );
+        }
       }
     }
 
     console.log("✅ Seeding concluído com sucesso!");
     console.log(
-      `📊 Foram criadas ${categories.length} categorias, ${products.length} produtos com ${products.reduce(
+      `📊 Foram criadas ${categories.length} categorias, ${products.length} produtos, ${products.reduce(
         (acc, p) => acc + p.variants.length,
         0
-      )} variantes.`
+      )} variantes, ${allSizes.length} tamanhos e ${totalStockEntries} entradas de estoque.`
     );
   } catch (error) {
     console.error("❌ Erro durante o seeding:", error);

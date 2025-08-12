@@ -23,9 +23,14 @@ const ConfirmationPage = async () => {
       shippingAddress: true,
       items: {
         with: {
-          productVariant: {
+          productStock: {
             with: {
-              product: true,
+              productVariant: {
+                with: {
+                  product: true,
+                },
+              },
+              productSize: true,
             },
           },
         },
@@ -34,7 +39,10 @@ const ConfirmationPage = async () => {
   });
   if (!cart || cart?.items.length === 0) redirect("/");
 
-  const cartTotalInCents = cart.items.reduce((acc, item) => acc + item.productVariant.priceInCents * item.quantity, 0);
+  const cartTotalInCents = cart.items.reduce(
+    (acc, item) => acc + item.productStock.productVariant.priceInCents * item.quantity,
+    0
+  );
   if (!cart.shippingAddress) redirect("/cart/identification");
 
   return (
@@ -58,12 +66,12 @@ const ConfirmationPage = async () => {
           subtotalInCents={cartTotalInCents}
           totalInCents={cartTotalInCents}
           products={cart.items.map((item) => ({
-            id: item.productVariant.id,
-            name: item.productVariant.product.name,
-            variantName: item.productVariant.name,
+            id: item.productStock.productVariant.id,
+            name: `${item.productStock.productVariant.product.name} - ${item.productStock.productSize.value}`,
+            variantName: item.productStock.productVariant.name,
             quantity: item.quantity,
-            priceInCents: item.productVariant.priceInCents,
-            imageUrl: item.productVariant.imageUrl,
+            priceInCents: item.productStock.productVariant.priceInCents,
+            imageUrl: item.productStock.productVariant.imageUrl,
           }))}
         />
       </div>

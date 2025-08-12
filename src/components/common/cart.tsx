@@ -35,10 +35,11 @@ export const Cart = () => {
                   <CartItem
                     key={item.id}
                     id={item.id}
-                    productName={item.productVariant.product.name}
-                    productVariantName={item.productVariant.name}
-                    productVariantImageUrl={item.productVariant.imageUrl}
-                    productVariantPriceInCents={item.productVariant.priceInCents}
+                    // Acessa as propriedades através da nova hierarquia
+                    productName={item.productStock.productVariant.product.name}
+                    productVariantName={item.productStock.productVariant.name}
+                    productVariantImageUrl={item.productStock.productVariant.imageUrl}
+                    productVariantPriceInCents={item.productStock.productVariant.priceInCents}
                     quantity={item.quantity}
                   />
                 ))}
