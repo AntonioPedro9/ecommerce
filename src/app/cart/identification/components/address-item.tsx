@@ -1,6 +1,6 @@
 "use client";
 
-import { Trash2, TrashIcon } from "lucide-react";
+import { TrashIcon } from "lucide-react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
@@ -34,13 +34,13 @@ export const AddressItem = ({ address, onSelect, isSelected }: AddressItemProps)
 
   return (
     <Card key={address.id}>
-      <CardContent className="flex">
+      <CardContent className="flex justify-between items-center gap-4">
         <div className="flex items-start space-x-2">
           <RadioGroupItem value={address.id} id={address.id} />
           <div className="flex-1">
             <Label htmlFor={address.id} className="cursor-pointer">
               <div>
-                <p className="text-sm">{formatAddress(address)}</p>
+                <p className="text-sm whitespace-pre-line"> {formatAddress(address)}</p>
               </div>
             </Label>
           </div>

@@ -9,6 +9,5 @@ export const formatAddress = (address: {
   zipCode: string;
 }) => {
   const complementString = address.complement ? `, ${address.complement}` : "";
-
-  return `${address.street}, ${address.number}${complementString}, ${address.neighborhood}, ${address.city} - ${address.state} • CEP: ${address.zipCode}`;
+  return `${address.street}, ${address.number}${complementString}, ${address.neighborhood}, ${address.city} - ${address.state}\n• CEP: ${address.zipCode}`;
 };
