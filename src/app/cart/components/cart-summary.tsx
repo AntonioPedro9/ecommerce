@@ -12,6 +12,7 @@ interface CartSummaryProps {
     id: string;
     name: string;
     variantName: string;
+    size: string;
     quantity: number;
     priceInCents: number;
     imageUrl: string;
@@ -48,7 +49,9 @@ const CartSummary = ({ subtotalInCents, totalInCents, products }: CartSummaryPro
               <Image src={product.imageUrl} alt={product.name} width={78} height={78} className="rounded-lg" />
               <div className="flex flex-col gap-1">
                 <p className="text-sm font-semibold">{product.name}</p>
-                <p className="text-muted-foreground text-xs font-medium">{product.variantName}</p>
+                <p className="text-muted-foreground text-xs font-medium">
+                  {product.variantName} - {product.size}
+                </p>
                 <p className="text-muted-foreground text-xs font-medium">
                   {product.quantity} {product.quantity > 1 ? "Itens" : "item"}
                 </p>

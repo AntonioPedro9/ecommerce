@@ -64,7 +64,7 @@ const IdentificationPage = async () => {
             id: item.productStock.productVariant.id,
             name: item.productStock.productVariant.product.name,
             variantName: item.productStock.productVariant.name,
-            sizeValue: item.productStock.productSize.value,
+            size: item.productStock.productSize.value,
             quantity: item.quantity,
             priceInCents: item.productStock.productVariant.priceInCents,
             imageUrl: item.productStock.productVariant.imageUrl,

@@ -104,7 +104,7 @@ const ProductActions = ({ availableSizes }: ProductActionProps) => {
         </div>
       </div>
 
-      <div className="flex flex-col px-5 space-y-4">
+      <div className="flex flex-col px-5 space-y-2">
         <AddToCartButton productStockId={selectedProductStockId} quantity={quantity} />
         <Button className="rounded-full" size="lg" disabled={isBuyNowPending} onClick={handleBuyNow}>
           {isBuyNowPending && <Loader2 className="animate-spin" />}

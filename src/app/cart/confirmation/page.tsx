@@ -54,7 +54,8 @@ const ConfirmationPage = async () => {
           <CardContent className="space-y-6">
             <Card>
               <CardContent>
-                <p className="text-sm">{formatAddress(cart.shippingAddress)}</p>
+                <p className="text-sm font-semibold">{cart.shippingAddress.recipientName}</p>
+                <pre className="text-sm text-muted-foreground">{formatAddress(cart.shippingAddress)}</pre>
               </CardContent>
             </Card>
             <FinishOrderButton />
@@ -65,8 +66,9 @@ const ConfirmationPage = async () => {
           totalInCents={cartTotalInCents}
           products={cart.items.map((item) => ({
             id: item.productStock.productVariant.id,
-            name: `${item.productStock.productVariant.product.name} - ${item.productStock.productSize.value}`,
+            name: item.productStock.productVariant.product.name,
             variantName: item.productStock.productVariant.name,
+            size: item.productStock.productSize.value,
             quantity: item.quantity,
             priceInCents: item.productStock.productVariant.priceInCents,
             imageUrl: item.productStock.productVariant.imageUrl,

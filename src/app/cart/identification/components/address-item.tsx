@@ -49,9 +49,7 @@ export const AddressItem = ({ address, onSelect, isSelected }: AddressItemProps)
           <RadioGroupItem value={address.id} id={address.id} />
           <div className="flex-1">
             <Label htmlFor={address.id} className="cursor-pointer">
-              <div>
-                <p className="text-sm whitespace-pre-line"> {formatAddress(address)}</p>
-              </div>
+              <p className="text-sm whitespace-pre-line">{formatAddress(address)}</p>
             </Label>
           </div>
         </div>
