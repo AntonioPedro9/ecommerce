@@ -10,7 +10,7 @@ interface VariantSelectorProps {
 
 const VariantSelector = ({ variants, selectedVariantSlug }: VariantSelectorProps) => {
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col space-y-2">
       <h3 className="font-medium">Cores e modelos</h3>
       <div className="flex items-center gap-4">
         {variants.map((variant) => (

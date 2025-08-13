@@ -3,6 +3,7 @@
 import { ShoppingBasketIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { formatCentsToBRL } from "@/helpers/money";
@@ -10,15 +11,16 @@ import { useCart } from "@/hooks/queries/use-cart";
 
 import { ScrollArea } from "../ui/scroll-area";
 import { Separator } from "../ui/separator";
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "../ui/sheet";
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "../ui/sheet";
 import CartItem from "./cart-item";
 
 export const Cart = () => {
   const { data: cart } = useCart();
   const hasItems = cart?.items && cart.items.length > 0;
+  const [open, setOpen] = useState(false);
 
   return (
-    <Sheet>
+    <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
         <Button variant="outline" size="icon">
           <ShoppingBasketIcon />
@@ -27,6 +29,7 @@ export const Cart = () => {
       <SheetContent>
         <SheetHeader>
           <SheetTitle>Carrinho</SheetTitle>
+          <SheetDescription></SheetDescription>
         </SheetHeader>
 
         <div className="flex h-full flex-col px-5 pb-5">
@@ -58,7 +61,9 @@ export const Cart = () => {
                 </div>
 
                 <Button className="mt-5 rounded-full" size="lg" asChild>
-                  <Link href="/cart/identification">Finalizar compra</Link>
+                  <Link href="/cart/identification" onClick={() => setOpen(false)}>
+                    Finalizar compra
+                  </Link>
                 </Button>
               </div>
             </>

@@ -72,9 +72,9 @@ const ProductActions = ({ availableSizes }: ProductActionProps) => {
   return (
     <>
       <div className="px-5">
-        <div className="space-y-4">
+        <div className="space-y-2">
           <h3 className="font-medium">Tamanho</h3>
-          <div className="flex items-center gap-2 flex-wrap">
+          <div className="flex items-center gap-1 flex-wrap">
             {availableSizes.map((size) => (
               <Button
                 key={size.id}
@@ -90,7 +90,7 @@ const ProductActions = ({ availableSizes }: ProductActionProps) => {
           </div>
         </div>
 
-        <div className="flex flex-col gap-4 mt-4">
+        <div className="flex flex-col space-y-2 mt-4">
           <h3 className="font-medium">Quantidade</h3>
           <div className="w-[100px] flex justify-between items-center border rounded-full">
             <Button size="icon" variant="ghost" onClick={handleDecrement} className="rounded-full">

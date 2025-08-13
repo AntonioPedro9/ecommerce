@@ -11,7 +11,7 @@ import { authClient } from "@/lib/auth-client";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Button } from "../ui/button";
 import { Separator } from "../ui/separator";
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "../ui/sheet";
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "../ui/sheet";
 import { Cart } from "./cart";
 
 interface HeaderProps {
@@ -43,6 +43,7 @@ export const Header = ({ categories }: HeaderProps) => {
           <SheetContent>
             <SheetHeader>
               <SheetTitle>Menu</SheetTitle>
+              <SheetDescription></SheetDescription>
             </SheetHeader>
             <div className="px-5">
               {session?.user ? (
