@@ -1,4 +1,4 @@
-import { eq } from "drizzle-orm";
+import { desc, eq } from "drizzle-orm";
 import { headers } from "next/headers";
 
 import { Header } from "@/components/common/header";
@@ -32,6 +32,7 @@ const MyOrderPage = async () => {
         },
       },
     },
+    orderBy: [desc(orderTable.createdAt)],
   });
 
   return (
