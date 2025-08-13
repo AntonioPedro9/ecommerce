@@ -60,25 +60,32 @@ export const Header = () => {
                   <ul className="flex flex-col gap-4 px-5">
                     <li className="flex items-center gap-2">
                       <HomeIcon size="16" />
-                      <Link href="/">Início</Link>
+                      <p className="text-sm font-medium">
+                        <Link href="/">Início</Link>
+                      </p>
                     </li>
 
                     <li className="flex items-center gap-2">
                       <TruckIcon size="16" />
-                      <Link href="/my-orders">Meus pedidos</Link>
+                      <p className="text-sm font-medium">
+                        <Link href="/my-orders">Meus pedidos</Link>
+                      </p>
                     </li>
 
                     <li className="flex items-center gap-2" onClick={() => authClient.signOut()}>
                       <LogOutIcon size="16" />
-                      <Link href="/authentication">Sair da conta</Link>
+                      <p className="text-sm font-medium">
+                        <Link href="/authentication">Sair da conta</Link>
+                      </p>
                     </li>
                   </ul>
                 </>
               ) : (
                 <div className="flex justify-between items-center">
-                  <h2 className="font-semibold">Olá, Faça seu login!</h2>
-                  <Button size={"icon"} asChild variant={"outline"}>
+                  <h2 className="font-semibold">Olá. Faça seu login!</h2>
+                  <Button asChild className="rounded-full">
                     <Link href="/authentication">
+                      Login
                       <LogInIcon />
                     </Link>
                   </Button>

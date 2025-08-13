@@ -37,9 +37,7 @@ const Orders = ({ orders }: OrderProps) => {
                     <div className="flex flex-col gap-1">
                       <div className="flex flex-col justify-between">
                         <p className="text-sm font-semibold">Pedido #{String(order.orderNumber).padStart(4, "0")}</p>
-                        <p className="text-muted-foreground">
-                          Data: {new Date(order.createdAt).toLocaleDateString("pt-BR")}
-                        </p>
+                        <p className="text-muted-foreground">{new Date(order.createdAt).toLocaleDateString("pt-BR")}</p>
                         {order.status === "paid" && <p className="text-muted-foreground">Status: Pago</p>}
                         {order.status === "pending" && <p className="text-muted-foreground">Status: Pendente</p>}
                         {order.status === "canceled" && <p className="text-muted-foreground">Status: Cancelado</p>}
