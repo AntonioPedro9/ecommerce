@@ -119,6 +119,7 @@ export const productVariantRelations = relations(productVariantTable, ({ one, ma
 export const productSizeTable = pgTable("product_size", {
   id: uuid().primaryKey().defaultRandom(),
   value: text("value").notNull(),
+  displayOrder: integer("display_order").notNull(),
   createdAt: timestamp("created_at").notNull().defaultNow(),
 });
 

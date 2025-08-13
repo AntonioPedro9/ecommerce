@@ -497,17 +497,34 @@ async function main() {
     }
 
     // Inserir tamanhos (Novo)
-    const allSizes = [...new Set([...clothingSizes, ...shoeSizes, ...genericSizes])];
+    const allSizesWithOrder = [
+      { value: "Único", displayOrder: 0 },
+      { value: "PP", displayOrder: 1 },
+      { value: "P", displayOrder: 2 },
+      { value: "M", displayOrder: 3 },
+      { value: "G", displayOrder: 4 },
+      { value: "GG", displayOrder: 5 },
+      { value: "37", displayOrder: 6 },
+      { value: "38", displayOrder: 7 },
+      { value: "39", displayOrder: 8 },
+      { value: "40", displayOrder: 9 },
+      { value: "41", displayOrder: 10 },
+      { value: "42", displayOrder: 11 },
+      { value: "43", displayOrder: 12 },
+      { value: "44", displayOrder: 13 },
+    ];
+
     const sizeMap = new Map<string, string>();
     console.log("📏 Criando tamanhos...");
-    for (const size of allSizes) {
+    for (const size of allSizesWithOrder) {
       const sizeId = crypto.randomUUID();
       await db.insert(productSizeTable).values({
         id: sizeId,
-        value: size,
+        value: size.value,
+        displayOrder: size.displayOrder,
       });
-      sizeMap.set(size, sizeId);
-      console.log(`  📏 Criado tamanho: ${size}`);
+      sizeMap.set(size.value, sizeId);
+      console.log(`  📏 Criado tamanho: ${size.value}`);
     }
 
     // Inserir produtos e suas variantes e estoque
@@ -575,7 +592,7 @@ async function main() {
       `📊 Foram criadas ${categories.length} categorias, ${products.length} produtos, ${products.reduce(
         (acc, p) => acc + p.variants.length,
         0
-      )} variantes, ${allSizes.length} tamanhos e ${totalStockEntries} entradas de estoque.`
+      )} variantes, ${allSizesWithOrder.length} tamanhos e ${totalStockEntries} entradas de estoque.`
     );
   } catch (error) {
     console.error("❌ Erro durante o seeding:", error);

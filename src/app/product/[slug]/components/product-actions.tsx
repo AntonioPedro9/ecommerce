@@ -1,8 +1,13 @@
 "use client";
 
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { MinusIcon, PlusIcon } from "lucide-react";
+import { Loader2 } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { toast } from "sonner";
 
+import { addProductToCart } from "@/actions/add-cart-product";
 import { Button } from "@/components/ui/button";
 
 import AddToCartButton from "./add-to-cart-button";
@@ -21,6 +26,8 @@ interface ProductActionProps {
 const ProductActions = ({ availableSizes }: ProductActionProps) => {
   const [quantity, setQuantity] = useState(1);
   const [selectedSizeId, setSelectedSizeId] = useState<string | null>(null);
+  const router = useRouter();
+  const queryClient = useQueryClient();
 
   const handleDecrement = () => {
     setQuantity((prev) => (prev > 1 ? prev - 1 : 1));
@@ -35,10 +42,26 @@ const ProductActions = ({ availableSizes }: ProductActionProps) => {
 
   const isAddToCartDisabled = !selectedProductStockId;
 
+  const { mutate: buyNowMutate, isPending: isBuyNowPending } = useMutation({
+    mutationFn: () =>
+      addProductToCart({
+        productStockId: selectedProductStockId!,
+        quantity,
+      }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["cart"] });
+      toast.success("Produto adicionado ao carrinho!");
+      router.push("/cart/identification");
+    },
+    onError: () => {
+      toast.error("Erro ao adicionar o produto.");
+    },
+  });
+
   return (
     <>
       <div className="px-5">
-        <div className="  space-y-4">
+        <div className="space-y-4">
           <h3 className="font-medium">Tamanho</h3>
           <div className="flex items-center gap-2 flex-wrap">
             {availableSizes.map((size) => (
@@ -72,7 +95,13 @@ const ProductActions = ({ availableSizes }: ProductActionProps) => {
 
       <div className="flex flex-col px-5 space-y-4">
         <AddToCartButton productStockId={selectedProductStockId} quantity={quantity} disabled={isAddToCartDisabled} />
-        <Button className="rounded-full" size="lg">
+        <Button
+          className="rounded-full"
+          size="lg"
+          disabled={isAddToCartDisabled || isBuyNowPending}
+          onClick={() => buyNowMutate()}
+        >
+          {isBuyNowPending && <Loader2 className="animate-spin" />}
           Comprar agora
         </Button>
       </div>

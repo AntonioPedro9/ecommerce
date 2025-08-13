@@ -1,4 +1,4 @@
-import { eq } from "drizzle-orm";
+import { and, asc, eq, gt } from "drizzle-orm";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 
@@ -6,7 +6,7 @@ import Footer from "@/components/common/footer";
 import { Header } from "@/components/common/header";
 import ProductList from "@/components/common/product-list";
 import { db } from "@/db";
-import { productTable, productVariantTable } from "@/db/schema";
+import { productSizeTable, productStockTable, productTable, productVariantTable } from "@/db/schema";
 import { formatCentsToBRL } from "@/helpers/money";
 
 import ProductActions from "./components/product-actions";
@@ -19,7 +19,6 @@ interface ProductPageProps {
 const ProductPage = async ({ params }: ProductPageProps) => {
   const { slug } = await params;
 
-  // Query atualizada para buscar a variante e os tamanhos disponíveis
   const productVariant = await db.query.productVariantTable.findFirst({
     where: eq(productVariantTable.slug, slug),
     with: {
@@ -28,23 +27,24 @@ const ProductPage = async ({ params }: ProductPageProps) => {
           variants: true,
         },
       },
-      stockItems: {
-        with: {
-          productSize: true,
-        },
-        where: (stock, { gt }) => gt(stock.quantity, 0),
-      },
     },
   });
   if (!productVariant) return notFound();
 
-  console.log(productVariant);
+  const stockItems = await db
+    .select({
+      stock: productStockTable,
+      size: productSizeTable,
+    })
+    .from(productStockTable)
+    .innerJoin(productSizeTable, eq(productSizeTable.id, productStockTable.productSizeId))
+    .where(and(eq(productStockTable.productVariantId, productVariant.id), gt(productStockTable.quantity, 0)))
+    .orderBy(asc(productSizeTable.displayOrder));
 
-  // Mapear os tamanhos disponíveis, mantendo os objetos com id e valor
-  const availableSizes = productVariant.stockItems.map((item) => ({
-    id: item.productSize.id,
-    value: item.productSize.value,
-    stockId: item.id,
+  const availableSizes = stockItems.map(({ stock, size }) => ({
+    id: size.id,
+    value: size.value,
+    stockId: stock.id,
   }));
 
   const likelyProducts = await db.query.productTable.findMany({
