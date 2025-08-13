@@ -9,21 +9,17 @@ import { addProductToCart } from "@/actions/add-cart-product";
 import { Button } from "@/components/ui/button";
 
 interface AddToCartButtonProps {
-  productStockId: string | null; // Agora aceita null!
+  productStockId: string | null;
   quantity: number;
-  disabled: boolean; // Recebe o estado de disabled do pai
 }
 
-const AddToCartButton = ({ productStockId, quantity, disabled }: AddToCartButtonProps) => {
+const AddToCartButton = ({ productStockId, quantity }: AddToCartButtonProps) => {
   const queryClient = useQueryClient();
 
   const { mutate, isPending } = useMutation({
     mutationKey: ["addProductToCart", productStockId, quantity],
     mutationFn: () => {
-      // Garantimos que productStockId não é null antes de chamar a action
-      if (!productStockId) {
-        throw new Error("Tamanho não selecionado");
-      }
+      if (!productStockId) throw new Error("Tamanho não selecionado");
       return addProductToCart({
         productStockId,
         quantity,
@@ -38,16 +34,18 @@ const AddToCartButton = ({ productStockId, quantity, disabled }: AddToCartButton
     },
   });
 
+  const handleAddToCartClick = () => {
+    if (!productStockId) {
+      toast.error("Por favor, selecione um tamanho para continuar.");
+      return;
+    }
+    mutate();
+  };
+
   return (
-    <Button
-      className="rounded-full"
-      size="lg"
-      variant="outline"
-      disabled={isPending || disabled}
-      onClick={() => mutate()}
-    >
+    <Button className="rounded-full" size="lg" variant="outline" disabled={isPending} onClick={handleAddToCartClick}>
       {isPending && <Loader2 className="animate-spin" />}
-      Adicionar à sacola
+      Adicionar ao carrinho
     </Button>
   );
 };
