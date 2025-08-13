@@ -5,7 +5,6 @@ import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
 import Footer from "@/components/common/footer";
-import { Header } from "@/components/common/header";
 import { db } from "@/db";
 import { shippingAddressTable } from "@/db/schema";
 import { auth } from "@/lib/auth";
@@ -52,7 +51,6 @@ const IdentificationPage = async () => {
 
   return (
     <div>
-      <Header />
       <div className="space-y-4 px-5">
         <Addresses
           shippingAddresses={shippingAddresses}

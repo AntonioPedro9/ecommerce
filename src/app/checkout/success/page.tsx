@@ -3,14 +3,12 @@
 import Image from "next/image";
 import Link from "next/link";
 
-import { Header } from "@/components/common/header";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogTitle } from "@/components/ui/dialog";
 
 const CheckoutSuccessPage = () => {
   return (
     <>
-      <Header />
       <Dialog open={true} onOpenChange={() => {}}>
         <DialogContent className="text-center">
           <DialogTitle className="mt-4 text-2xl">Pedido efetuado!</DialogTitle>

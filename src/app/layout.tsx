@@ -4,6 +4,8 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Toaster } from "sonner";
 
+import { Header } from "@/components/common/header";
+import { db } from "@/db";
 import ReactQueryProvider from "@/providers/react-query";
 
 const geistSans = Geist({
@@ -21,15 +23,20 @@ export const metadata: Metadata = {
   description: "Cloth ecommerce",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const categories = await db.query.categoryTable.findMany({});
+
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <ReactQueryProvider>{children}</ReactQueryProvider>
+        <ReactQueryProvider>
+          <Header categories={categories} />
+          {children}
+        </ReactQueryProvider>
         <Toaster />
       </body>
     </html>

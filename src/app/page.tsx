@@ -4,7 +4,6 @@ import Image from "next/image";
 import BrandList from "@/components/common/brand-list";
 import CategorySelector from "@/components/common/category-selector";
 import Footer from "@/components/common/footer";
-import { Header } from "@/components/common/header";
 import ProductList from "@/components/common/product-list";
 import { db } from "@/db";
 import { productTable } from "@/db/schema";
@@ -27,8 +26,6 @@ const Home = async () => {
 
   return (
     <>
-      <Header />
-
       <div className="space-y-6">
         <div className="px-5">
           <Image

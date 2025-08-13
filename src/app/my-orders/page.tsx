@@ -1,7 +1,6 @@
 import { desc, eq } from "drizzle-orm";
 import { headers } from "next/headers";
 
-import { Header } from "@/components/common/header";
 import { db } from "@/db";
 import { orderTable } from "@/db/schema";
 import { auth } from "@/lib/auth";
@@ -37,7 +36,6 @@ const MyOrderPage = async () => {
 
   return (
     <>
-      <Header />
       <div className="px-5">
         <Orders
           orders={orders.map((order) => ({
