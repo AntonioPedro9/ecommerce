@@ -1,6 +1,6 @@
 "use client";
 
-import { HomeIcon, LogInIcon, LogOutIcon, MenuIcon, ShoppingBasketIcon, TruckIcon } from "lucide-react";
+import { HomeIcon, LogInIcon, LogOutIcon, MenuIcon, TruckIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 

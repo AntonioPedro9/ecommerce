@@ -13,12 +13,12 @@ const CheckoutSuccessPage = () => {
       <Header />
       <Dialog open={true} onOpenChange={() => {}}>
         <DialogContent className="text-center">
-          <Image src="/illustration.svg" alt="Success" width={300} height={300} className="mx-auto" />
           <DialogTitle className="mt-4 text-2xl">Pedido efetuado!</DialogTitle>
           <DialogDescription className="font-medium">
             Você pode acompanhar o status na seção de “Meus Pedidos”.
           </DialogDescription>
-          <DialogFooter className="gap-4">
+          <Image src="/order-confirmed.svg" alt="Success" width={100} height={20} className="mx-auto" />
+          <DialogFooter className="gap-2">
             <Button className="rounded-full" size="lg" asChild>
               <Link href="/my-orders">Ver meus pedidos</Link>
             </Button>

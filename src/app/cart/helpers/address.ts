@@ -8,6 +8,13 @@ export const formatAddress = (address: {
   state: string;
   zipCode: string;
 }) => {
-  const complementString = address.complement ? `, ${address.complement}` : "";
-  return `${address.street}, ${address.number}${complementString}, ${address.neighborhood}, ${address.city} - ${address.state}\n• CEP: ${address.zipCode}`;
+  const addressParts = [
+    `${address.street}, ${address.number}`,
+    address.complement,
+    address.neighborhood,
+    `${address.city} - ${address.state}`,
+    `CEP: ${address.zipCode}`,
+  ];
+
+  return addressParts.filter(Boolean).join("\n");
 };

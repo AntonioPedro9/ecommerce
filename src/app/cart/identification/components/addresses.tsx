@@ -1,6 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -14,6 +15,8 @@ import { Form, FormControl, FormField, FormItem, FormMessage } from "@/component
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { BRAZILIAN_STATES } from "@/constants";
 import { shippingAddressTable } from "@/db/schema";
 import { useCreateShippingAddress } from "@/hooks/mutations/use-create-shipping-address";
 import { useUpdateCartShippingAddress } from "@/hooks/mutations/use-update-cart-shipping-address";
@@ -112,8 +115,9 @@ const Addresses = ({ shippingAddresses, defaultShippingAddressId, authenticatedU
         ) : (
           <RadioGroup value={selectedAddress} onValueChange={setSelectedAddress}>
             {addresses?.length === 0 && (
-              <div className="py-4 text-center">
+              <div className="flex flex-col items-center gap-4 py-4 text-center">
                 <p className="text-muted-foreground">Você ainda não possui endereços cadastrados.</p>
+                <Image src="/no-address.svg" alt="Beware logo" width={100} height={20} />
               </div>
             )}
 
@@ -152,7 +156,7 @@ const Addresses = ({ shippingAddresses, defaultShippingAddressId, authenticatedU
 
         {selectedAddress === "add_new" && (
           <Form {...form}>
-            <h3 className="font-semibold mt-6">Novo endereço</h3>
+            <h3 className="font-semibold mt-5">Novo endereço</h3>
 
             <form onSubmit={form.handleSubmit(onSubmit)} className="mt-4 space-y-4">
               <div className="grid gap-4 md:grid-cols-2">
@@ -274,7 +278,7 @@ const Addresses = ({ shippingAddresses, defaultShippingAddressId, authenticatedU
                     control={form.control}
                     name="city"
                     render={({ field }) => (
-                      <FormItem>
+                      <FormItem className="flex-[3]">
                         <FormControl>
                           <Input placeholder="Cidade *" {...field} />
                         </FormControl>
@@ -287,10 +291,21 @@ const Addresses = ({ shippingAddresses, defaultShippingAddressId, authenticatedU
                     control={form.control}
                     name="state"
                     render={({ field }) => (
-                      <FormItem>
-                        <FormControl>
-                          <Input placeholder="Estado *" {...field} />
-                        </FormControl>
+                      <FormItem className="flex-[1]">
+                        <Select onValueChange={field.onChange} value={field.value}>
+                          <FormControl>
+                            <SelectTrigger className="w-full">
+                              <SelectValue placeholder="Estado *" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {BRAZILIAN_STATES.map((state) => (
+                              <SelectItem key={state} value={state}>
+                                {state}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
                         <FormMessage />
                       </FormItem>
                     )}
@@ -300,7 +315,7 @@ const Addresses = ({ shippingAddresses, defaultShippingAddressId, authenticatedU
 
               <Button
                 type="submit"
-                className="w-full rounded-full mt-2"
+                className="w-full rounded-full"
                 size="lg"
                 disabled={createShippingAddressMutation.isPending || updateCartShippingAddressMutation.isPending}
               >
