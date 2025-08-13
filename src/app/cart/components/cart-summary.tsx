@@ -49,6 +49,9 @@ const CartSummary = ({ subtotalInCents, totalInCents, products }: CartSummaryPro
               <div className="flex flex-col gap-1">
                 <p className="text-sm font-semibold">{product.name}</p>
                 <p className="text-muted-foreground text-xs font-medium">{product.variantName}</p>
+                <p className="text-muted-foreground text-xs font-medium">
+                  {product.quantity} {product.quantity > 1 ? "Itens" : "item"}
+                </p>
               </div>
             </div>
             <div className="flex flex-col items-end justify-center gap-2">

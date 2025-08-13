@@ -9,6 +9,7 @@ import { orderTable } from "@/db/schema";
 interface OrderProps {
   orders: Array<{
     id: string;
+    orderNumber: number;
     totalPriceInCents: number;
     status: (typeof orderTable.$inferSelect)["status"];
     createdAt: Date;
@@ -34,12 +35,14 @@ const Orders = ({ orders }: OrderProps) => {
                 <AccordionItem value="1">
                   <AccordionTrigger>
                     <div className="flex flex-col gap-1">
-                      {order.status === "paid" && <Badge>Pago</Badge>}
-                      {order.status === "pending" && <Badge variant="outline">Pagamento pendente</Badge>}
-                      {order.status === "canceled" && <Badge variant="destructive">Cancelado</Badge>}
-
-                      <div className="flex justify-between items-center">
-                        <p>Pedido feito em {new Date(order.createdAt).toLocaleDateString("pt-BR")}</p>
+                      <div className="flex flex-col justify-between">
+                        <p className="text-sm font-semibold">Pedido #{String(order.orderNumber).padStart(4, "0")}</p>
+                        <p className="text-muted-foreground">
+                          Data: {new Date(order.createdAt).toLocaleDateString("pt-BR")}
+                        </p>
+                        {order.status === "paid" && <p className="text-muted-foreground">Status: Pago</p>}
+                        {order.status === "pending" && <p className="text-muted-foreground">Status: Pendente</p>}
+                        {order.status === "canceled" && <p className="text-muted-foreground">Status: Cancelado</p>}
                       </div>
                     </div>
                   </AccordionTrigger>

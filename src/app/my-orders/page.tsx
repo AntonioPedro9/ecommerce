@@ -41,6 +41,7 @@ const MyOrderPage = async () => {
         <Orders
           orders={orders.map((order) => ({
             id: order.id,
+            orderNumber: order.orderNumber,
             totalPriceInCents: order.totalPriceInCents,
             status: order.status,
             createdAt: order.createdAt,

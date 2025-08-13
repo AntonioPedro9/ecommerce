@@ -18,7 +18,7 @@ interface ProductActionProps {
   availableSizes: Size[];
 }
 
-const ProductActions = ({ productVariantId, availableSizes }: ProductActionProps) => {
+const ProductActions = ({ availableSizes }: ProductActionProps) => {
   const [quantity, setQuantity] = useState(1);
   const [selectedSizeId, setSelectedSizeId] = useState<string | null>(null);
 
