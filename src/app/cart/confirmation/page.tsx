@@ -45,7 +45,7 @@ const ConfirmationPage = async () => {
   if (!cart.shippingAddress) redirect("/cart/identification");
 
   return (
-    <div>
+    <>
       <div className="space-y-4 px-5">
         <Card>
           <CardHeader>
@@ -76,7 +76,7 @@ const ConfirmationPage = async () => {
       <div className="mt-12">
         <Footer />
       </div>
-    </div>
+    </>
   );
 };
 

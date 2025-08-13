@@ -9,14 +9,13 @@ export const POST = async (request: Request) => {
   const signature = request.headers.get("stripe-signature");
   if (!signature) return new NextResponse("No signature", { status: 400 });
 
-  const text = await request.text();
-
   const stripeSecretKey = process.env.STRIPE_SECRET_KEY!;
   if (!stripeSecretKey) throw new Error("Stripe secret key is not set");
 
   const stripeWeebhookKey = process.env.STRIPE_WEBHOOK_SECRET!;
   if (!stripeWeebhookKey) throw new Error("Stripe webhook key is not set");
 
+  const text = await request.text();
   const stripe = new Stripe(stripeSecretKey);
 
   try {

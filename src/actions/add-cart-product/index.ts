@@ -21,9 +21,8 @@ export const addProductToCart = async (data: AddProductToCartSchema) => {
     where: (stock, { eq }) => eq(stock.id, data.productStockId),
   });
 
-  if (!productStock || productStock.quantity <= 0) {
-    throw new Error("Product out of stock or combination not found");
-  }
+  const productNotAvailable = !productStock || productStock.quantity <= 0;
+  if (productNotAvailable) throw new Error("Product not available");
 
   const cart = await db.query.cartTable.findFirst({
     where: (cart, { eq }) => eq(cart.userId, session.user.id),
@@ -46,9 +45,8 @@ export const addProductToCart = async (data: AddProductToCartSchema) => {
   });
 
   if (cartItem) {
-    if (productStock.quantity < cartItem.quantity + data.quantity) {
-      throw new Error("Not enough stock available");
-    }
+    const noStockAvailable = productStock.quantity < cartItem.quantity + data.quantity;
+    if (noStockAvailable) throw new Error("Not enough stock available");
 
     await db
       .update(cartItemTable)

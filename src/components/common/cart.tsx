@@ -49,13 +49,14 @@ export const Cart = () => {
                   </div>
                 </ScrollArea>
               </div>
-
               <div className="flex flex-col gap-4">
                 <Separator />
+
                 <div className="flex items-center justify-between text-xs font-medium">
                   <p>Total</p>
                   <p>{formatCentsToBRL(cart?.totalPriceInCents ?? 0)}</p>
                 </div>
+
                 <Button className="mt-5 rounded-full" size="lg" asChild>
                   <Link href="/cart/identification">Finalizar compra</Link>
                 </Button>

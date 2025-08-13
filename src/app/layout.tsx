@@ -23,13 +23,8 @@ export const metadata: Metadata = {
   description: "Cloth ecommerce",
 };
 
-export default async function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   const categories = await db.query.categoryTable.findMany({});
-
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>

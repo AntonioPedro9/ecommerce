@@ -9,6 +9,7 @@ export const getDecreaseCartProductQuantityMutationKey = (cartItemId: string) =>
 
 export const useDecreaseCartProductQuantity = (cartItemId: string) => {
   const queryClient = useQueryClient();
+
   return useMutation({
     mutationKey: getDecreaseCartProductQuantityMutationKey(cartItemId),
     mutationFn: () => decreaseCartProductQuantity({ cartItemId }),

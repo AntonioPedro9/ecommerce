@@ -15,10 +15,7 @@ const CategoryPage = async ({ params }: CategoryPageProps) => {
   const category = await db.query.categoryTable.findFirst({
     where: eq(categoryTable.slug, slug),
   });
-
-  if (!category) {
-    return notFound();
-  }
+  if (!category) return notFound();
 
   const products = await db.query.productTable.findMany({
     where: eq(productTable.categoryId, category.id),
