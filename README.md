@@ -61,7 +61,7 @@ src/
 1. **Clone the repository**
 
    ```bash
-   git clone https://github.com/AntonioPedro9/bootcamp-ecommerce
+   git clone https://github.com/AntonioPedro9/ecommerce
    cd bootcamp-ecommerce
    ```
 
