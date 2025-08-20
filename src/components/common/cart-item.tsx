@@ -15,6 +15,7 @@ interface CartItemProps {
   productVariantName: string;
   productVariantImageUrl: string;
   productVariantPriceInCents: number;
+  productSize: string;
   quantity: number;
 }
 
@@ -24,6 +25,7 @@ const CartItem = ({
   productVariantName,
   productVariantImageUrl,
   productVariantPriceInCents,
+  productSize,
   quantity,
 }: CartItemProps) => {
   const removeCartProductMutation = useRemoveCartProduct(id);
@@ -66,7 +68,9 @@ const CartItem = ({
         <Image src={productVariantImageUrl} alt={productVariantName} width={78} height={78} className="rounded-lg" />
         <div className="flex flex-col gap-1">
           <p className="text-sm font-semibold">{productName}</p>
-          <p className="text-muted-foreground text-xs font-medium">{productVariantName}</p>
+          <p className="text-muted-foreground text-xs font-medium">
+            {productVariantName} - {productSize}
+          </p>
           <div className="flex w-[100px] items-center justify-between rounded-lg border p-1">
             <Button className="h-4 w-4" variant="ghost" onClick={handleDecreaseQuantityClick}>
               <MinusIcon />

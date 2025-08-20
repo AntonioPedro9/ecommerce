@@ -46,6 +46,7 @@ export const Cart = () => {
                         productVariantName={item.productStock.productVariant.name}
                         productVariantImageUrl={item.productStock.productVariant.imageUrl}
                         productVariantPriceInCents={item.productStock.productVariant.priceInCents}
+                        productSize={item.productStock.productSize.value}
                         quantity={item.quantity}
                       />
                     ))}
