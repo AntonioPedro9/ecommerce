@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "db:generate": "drizzle-kit push",
+    "db:seed": "npx tsx --env-file=.env src/db/seeds.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.1",

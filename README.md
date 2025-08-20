@@ -1,36 +1,102 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🛍️ E-commerce Platform
 
-## Getting Started
+A modern e-commerce platform built with Next.js, TypeScript, and PostgreSQL.
 
-First, run the development server:
+## ✨ Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- **🛒 Shopping Cart Management** - Add, remove, and update cart items with real-time quantity controls
+- **👤 User Authentication** - Secure authentication system with BetterAuth
+- **🏠 Address Management** - Multiple shipping addresses
+- **💳 Payment Processing** - Stripe integration for secure checkout
+- **📊 Product Management** - Categories, variants, sizes, and stock tracking
+- **📦 Order Management** - Complete order lifecycle from cart to fulfillment
+
+## 🏗️ Architecture
+
+### Tech Stack
+
+![Next.js](https://img.shields.io/badge/Next.js-15-black?style=for-the-badge&logo=next.js)
+![React](https://img.shields.io/badge/React-19-blue?style=for-the-badge&logo=react)
+![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?style=for-the-badge&logo=typescript)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-blue?style=for-the-badge&logo=postgresql)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4-38B2AC?style=for-the-badge&logo=tailwind-css)
+![Drizzle ORM](https://img.shields.io/badge/Drizzle_ORM-0.44-orange?style=for-the-badge)
+![Stripe](https://img.shields.io/badge/Stripe-18-008CDD?style=for-the-badge&logo=stripe)
+
+### Project Structure
+
+```
+src/
+├── app/                  # Next.js App Router pages
+│   ├── authentication/   # Sign in/up pages
+│   ├── cart/             # Shopping cart functionality
+│   ├── checkout/         # Payment and order processing
+│   ├── product/          # Product detail pages
+│   ├── category/         # Category browsing
+│   └── my-orders/        # Order history
+├── actions/              # Server Actions for data mutations
+├── components/           # Reusable UI components
+│   ├── ui/               # shadcn/ui components
+│   └── common/           # Custom business components
+├── db/                   # Database schema and configuration
+├── hooks/                # Custom React Query hooks
+├── lib/                  # Utility functions and configurations
+└── providers/            # React context providers
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Database Schema
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+![Database Schema](docs/diagram.png)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🚀 Getting Started
 
-## Learn More
+### Prerequisites
 
-To learn more about Next.js, take a look at the following resources:
+- Node.js 18+
+- PostgreSQL database
+- Stripe account (for payments)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Installation
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+1. **Clone the repository**
 
-## Deploy on Vercel
+   ```bash
+   git clone https://github.com/AntonioPedro9/bootcamp-ecommerce
+   cd bootcamp-ecommerce
+   ```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+2. **Install dependencies**
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+   ```bash
+   npm install
+   ```
+
+3. **Environment Setup**
+
+   Create a `.env` file with the following variables:
+
+   ```env
+   DATABASE_URL="postgresql://username:password@localhost:5432/database_name"
+   STRIPE_SECRET_KEY="sk_test_..."
+   STRIPE_PUBLISHABLE_KEY="pk_test_..."
+   AUTH_SECRET="your-auth-secret"
+   ```
+
+4. **Database Setup**
+
+   ```bash
+   # Generate and run migrations
+   npm run db:generate
+   npm run db:migrate
+
+   # Seed the database with sample data
+   npm run db:seed
+   ```
+
+5. **Start Development Server**
+
+   ```bash
+   npm run dev
+   ```
+
+   Open [http://localhost:3000](http://localhost:3000) in your browser.
