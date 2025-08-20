@@ -12,22 +12,19 @@ export const POST = async (request: Request) => {
   const stripeSecretKey = process.env.STRIPE_SECRET_KEY!;
   if (!stripeSecretKey) throw new Error("Stripe secret key is not set");
 
-  const stripeWeebhookKey = process.env.STRIPE_WEBHOOK_SECRET!;
-  if (!stripeWeebhookKey) throw new Error("Stripe webhook key is not set");
+  const stripeWebhookKey = process.env.STRIPE_WEBHOOK_SECRET!;
+  if (!stripeWebhookKey) throw new Error("Stripe webhook key is not set");
 
   const text = await request.text();
   const stripe = new Stripe(stripeSecretKey);
 
   try {
-    const event = stripe.webhooks.constructEvent(text, signature, stripeWeebhookKey);
+    const event = stripe.webhooks.constructEvent(text, signature, stripeWebhookKey);
 
     if (event.type === "checkout.session.completed") {
       const session = event.data.object;
       const orderId = session.metadata?.orderId;
-
-      if (!orderId) {
-        return new NextResponse("Order ID not found in metadata", { status: 400 });
-      }
+      if (!orderId) return new NextResponse("Order ID not found in metadata", { status: 400 });
 
       await db.transaction(async (tx) => {
         // 1. Busque o pedido e seus itens com o respectivo estoque
