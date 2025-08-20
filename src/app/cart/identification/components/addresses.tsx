@@ -110,13 +110,13 @@ const Addresses = ({ shippingAddresses, defaultShippingAddressId, authenticatedU
       <CardContent>
         {isLoading ? (
           <div className="py-4 text-center">
-            <p>Carregando endereços...</p>
+            <p className="text-muted-foreground">Carregando endereços...</p>
           </div>
         ) : (
           <RadioGroup value={selectedAddress} onValueChange={setSelectedAddress}>
             {addresses?.length === 0 && (
               <div className="flex flex-col items-center gap-4 py-4 text-center">
-                <p className="text-muted-foreground">Você ainda não possui endereços cadastrados.</p>
+                <p className="text-muted-foreground">Você ainda não adicionou um endereço.</p>
                 <Image src="/no-address.svg" alt="Beware logo" width={100} height={20} />
               </div>
             )}
