@@ -2,18 +2,21 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogTitle } from "@/components/ui/dialog";
 
 const CheckoutSuccessPage = () => {
+  const [isOpen, setIsOpen] = useState(true);
+
   return (
     <>
-      <Dialog open={true} onOpenChange={() => {}}>
-        <DialogContent className="text-center">
+      <Dialog open={isOpen} onOpenChange={setIsOpen}>
+        <DialogContent className="text-center [&>button]:hidden">
           <DialogTitle className="mt-4 text-2xl">Pedido efetuado!</DialogTitle>
           <DialogDescription className="font-medium">
-            Você pode acompanhar o status na seção de “Meus Pedidos”.
+            Você pode visualizar em &quot;Meus Pedidos&quot;.
           </DialogDescription>
           <Image src="/order-confirmed.svg" alt="Success" width={100} height={20} className="mx-auto" />
           <DialogFooter className="gap-2">
