@@ -39,3 +39,5 @@ Você é um engenheiro de software sênior especializado em desenvolvimento web 
 - SEMPRE crie hooks customizados para queries e mutations do React Query. SEMPRE use os [use-cart.ts](mdc:src/hooks/queries/use-cart.ts) e [use-increase-cart-product.ts](mdc:src/hooks/mutations/use-increase-cart-product.ts) como referência.
 - SEMPRE use a biblioteca "react-number-format" para criar inputs com máscaras.
 - SEMPRE crie e exporte uma função que retorne a query key de uma query e mutation key de uma mutation. SEMPRE use os [use-cart.ts](mdc:src/hooks/queries/use-cart.ts) e [use-increase-cart-product.ts](mdc:src/hooks/mutations/use-increase-cart-product.ts) como referência.
+- SEMPRE escreva os textos da documentação do projeto em inglês.
+- JAMAIS escreva tokens sensíveis na documentação do projeto.

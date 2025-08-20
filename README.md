@@ -76,11 +76,17 @@ src/
    Create a `.env` file with the following variables:
 
    ```env
-   DATABASE_URL="postgresql://username:password@localhost:5432/database_name"
-   STRIPE_SECRET_KEY="sk_test_..."
-   STRIPE_PUBLISHABLE_KEY="pk_test_..."
-   AUTH_SECRET="your-auth-secret"
+   NEXT_PUBLIC_APP_URL=http://localhost:3000
+   DATABASE_URL=postgresql://your-username:your-password@localhost:5432/your-database
+   BETTER_AUTH_SECRET=your-better-auth-secret
+   GOOGLE_CLIENT_ID=your-google-client-id
+   GOOGLE_CLIENT_SECRET=your-google-client-secret
+   NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=your-stripe-publishable-key
+   STRIPE_SECRET_KEY=your-stripe-secret-key
+   STRIPE_WEBHOOK_SECRET=your-stripe-webhook-secret
    ```
+
+   Note: Client-exposed environment variables must start with `NEXT_PUBLIC_` (`NEXT_PUBLIC_APP_URL`, `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY`). Variables without this prefix are available only on the server.
 
 4. **Database Setup**
 
