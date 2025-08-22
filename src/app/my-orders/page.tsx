@@ -1,20 +1,16 @@
 import { desc, eq } from "drizzle-orm";
-import { headers } from "next/headers";
 
 import { db } from "@/db";
 import { orderTable } from "@/db/schema";
-import { auth } from "@/lib/auth";
+import { requireUserAuth } from "@/lib/user-auth";
 
 import Orders from "./components/orders";
 
 const MyOrderPage = async () => {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
-  if (!session?.user) throw new Error("Unauthorized");
+  const user = await requireUserAuth();
 
   const orders = await db.query.orderTable.findMany({
-    where: eq(orderTable.userId, session.user.id),
+    where: eq(orderTable.userId, user.id),
     with: {
       items: {
         with: {

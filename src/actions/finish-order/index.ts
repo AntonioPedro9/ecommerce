@@ -1,20 +1,16 @@
 "use server";
 
 import { eq } from "drizzle-orm";
-import { headers } from "next/headers";
 
 import { db } from "@/db";
 import { cartItemTable, cartTable, orderItemTable, orderTable } from "@/db/schema";
-import { auth } from "@/lib/auth";
+import { requireUserAuth } from "@/lib/user-auth";
 
 export const finishOrder = async () => {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
-  if (!session) throw new Error("Unauthorized");
+  const user = await requireUserAuth();
 
   const cart = await db.query.cartTable.findFirst({
-    where: eq(cartTable.userId, session.user.id),
+    where: eq(cartTable.userId, user.id),
     with: {
       shippingAddress: true,
       items: {
@@ -55,7 +51,7 @@ export const finishOrder = async () => {
         recipientName: cart.shippingAddress.recipientName,
         state: cart.shippingAddress.state,
         street: cart.shippingAddress.street,
-        userId: session.user.id,
+        userId: user.id,
         totalPriceInCents,
         shippingAddressId: cart.shippingAddress!.id,
       })

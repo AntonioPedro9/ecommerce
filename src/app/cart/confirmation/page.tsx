@@ -1,23 +1,19 @@
-import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
 import Footer from "@/components/common/footer";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { db } from "@/db";
-import { auth } from "@/lib/auth";
+import { requireUserAuth } from "@/lib/user-auth";
 
 import CartSummary from "../components/cart-summary";
 import { formatAddress } from "../helpers/address";
 import FinishOrderButton from "./components/finish-order-button";
 
 const ConfirmationPage = async () => {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
-  if (!session?.user.id) redirect("/");
+  const user = await requireUserAuth();
 
   const cart = await db.query.cartTable.findFirst({
-    where: (cart, { eq }) => eq(cart.userId, session.user.id),
+    where: (cart, { eq }) => eq(cart.userId, user.id),
     with: {
       shippingAddress: true,
       items: {

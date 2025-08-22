@@ -1,29 +1,25 @@
 "use server";
 
 import { eq } from "drizzle-orm";
-import { headers } from "next/headers";
 import { z } from "zod";
 
 import { db } from "@/db";
 import { shippingAddressTable } from "@/db/schema";
-import { auth } from "@/lib/auth";
+import { requireUserAuth } from "@/lib/user-auth";
 
 import { softDeleteAddressSchema } from "./schema";
 
 export const softDeleteAddress = async (data: z.infer<typeof softDeleteAddressSchema>) => {
   softDeleteAddressSchema.parse(data);
 
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
-  if (!session?.user) throw new Error("Unauthorized");
+  const user = await requireUserAuth();
 
   const shippingAddress = await db.query.shippingAddressTable.findFirst({
     where: (shippingAddress, { eq }) => eq(shippingAddress.id, data.shippingAddressId),
   });
   if (!shippingAddress) throw new Error("Shipping address not found");
 
-  const shippingAddressDoesNotBelongToUser = shippingAddress.userId !== session.user.id;
+  const shippingAddressDoesNotBelongToUser = shippingAddress.userId !== user.id;
   if (shippingAddressDoesNotBelongToUser) throw new Error("Unauthorized");
 
   await db

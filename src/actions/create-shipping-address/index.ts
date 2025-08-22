@@ -1,26 +1,22 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { headers } from "next/headers";
 
 import { db } from "@/db";
 import { shippingAddressTable } from "@/db/schema";
-import { auth } from "@/lib/auth";
+import { requireUserAuth } from "@/lib/user-auth";
 
 import { CreateShippingAddressSchema, createShippingAddressSchema } from "./schema";
 
 export const createShippingAddress = async (data: CreateShippingAddressSchema) => {
   createShippingAddressSchema.parse(data);
 
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
-  if (!session?.user) throw new Error("Unauthorized");
+  const user = await requireUserAuth();
 
   const [shippingAddress] = await db
     .insert(shippingAddressTable)
     .values({
-      userId: session.user.id,
+      userId: user.id,
       recipientName: data.fullName,
       street: data.address,
       number: data.number,

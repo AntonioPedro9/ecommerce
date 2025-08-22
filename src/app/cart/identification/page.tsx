@@ -1,25 +1,21 @@
 "use server";
 
 import { eq } from "drizzle-orm";
-import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
 import Footer from "@/components/common/footer";
 import { db } from "@/db";
 import { shippingAddressTable } from "@/db/schema";
-import { auth } from "@/lib/auth";
+import { requireUserAuth } from "@/lib/user-auth";
 
 import CartSummary from "../components/cart-summary";
 import Addresses from "./components/addresses";
 
 const IdentificationPage = async () => {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
-  if (!session?.user.id) redirect("/");
+  const user = await requireUserAuth();
 
   const cart = await db.query.cartTable.findFirst({
-    where: (cart, { eq }) => eq(cart.userId, session.user.id),
+    where: (cart, { eq }) => eq(cart.userId, user.id),
     with: {
       shippingAddress: true,
       items: {
@@ -41,7 +37,7 @@ const IdentificationPage = async () => {
   if (!cart || cart?.items.length === 0) redirect("/");
 
   const shippingAddresses = await db.query.shippingAddressTable.findMany({
-    where: eq(shippingAddressTable.userId, session.user.id),
+    where: eq(shippingAddressTable.userId, user.id),
   });
 
   const cartTotalInCents = cart.items.reduce(
@@ -55,7 +51,7 @@ const IdentificationPage = async () => {
         <Addresses
           shippingAddresses={shippingAddresses}
           defaultShippingAddressId={cart.shippingAddressId || null}
-          authenticatedUserEmail={session.user.email}
+          authenticatedUserEmail={user.email}
         />
         <CartSummary
           subtotalInCents={cartTotalInCents}
