@@ -17,6 +17,7 @@ interface OrderProps {
       imageUrl: string;
       productName: string;
       productVariantName: string;
+      productSize: string;
       priceInCents: number;
       quantity: number;
     }>;
@@ -52,6 +53,7 @@ const Orders = ({ orders }: OrderProps) => {
                         name: item.productName,
                         variantName: item.productVariantName,
                         quantity: item.quantity,
+                        size: item.productSize,
                         priceInCents: item.priceInCents,
                         imageUrl: item.imageUrl,
                       }))}
